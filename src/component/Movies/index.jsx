@@ -8,6 +8,8 @@ export default function Movies() {
   const [currentPage, setCurrentPage] = useState(1);
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("filter type");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,9 +33,25 @@ export default function Movies() {
   const fetchMoviesData = useCallback(async () => {
     let url = "";
 
-    if (selectedGenre) {
+    if (selectedGenre && selectedFilter === "genre") {
       url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}&with_genres=${selectedGenre}`;
-    } else if (activeTab === "trending") {
+    }
+    else if (selectedFilter === "rating" && activeTab === "trending") {
+      // Still fetch trending movies and sort them locally
+      url = `https://api.themoviedb.org/3/trending/movie/day?api_key=c9fac173689f5f01ba1b0420f66d7093&page=${currentPage}`;
+    }
+    else if (selectedFilter === "rating" && activeTab === "upcoming") {
+      // Still fetch upcoming movies and sort them locally
+      url = `https://api.themoviedb.org/3/movie/upcoming?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}`;
+    }
+    else if (selectedFilter === "rating") {
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}&sort_by=vote_average.desc`;
+    }
+    else if (selectedFilter === "popularity") {
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}&sort_by=popularity.desc`;
+    }
+    // Default case (Trending, Top Rated, Upcoming)
+    else if (activeTab === "trending") {
       url = `https://api.themoviedb.org/3/trending/movie/day?api_key=c9fac173689f5f01ba1b0420f66d7093&page=${currentPage}`;
     } else if (activeTab === "top_rated") {
       url = `https://api.themoviedb.org/3/movie/top_rated?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}`;
@@ -41,13 +59,19 @@ export default function Movies() {
       url = `https://api.themoviedb.org/3/movie/upcoming?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}`;
     }
 
-    try {
-      const response = await axios.get(url);
-      setMoviesData(response.data.results);
-    } catch (err) {
-      console.error("Error fetching movies data:", err);
+      try {
+    const response = await axios.get(url);
+    let movies = response.data.results;
+
+    // If the filter is "rating" and tab is "trending, upcoming" sort locally by rating
+    if (selectedFilter === "rating" && (activeTab === "trending" || activeTab === "upcoming")) {
+      movies = movies.sort((a, b) => b.vote_average - a.vote_average);
     }
-  }, [activeTab, currentPage, selectedGenre]);
+    setMoviesData(movies);
+  } catch (err) {
+    console.error("Error fetching movies data:", err);
+  }
+}, [activeTab, currentPage, selectedGenre, selectedFilter]);
 
   useEffect(() => {
     fetchMoviesData();
@@ -55,58 +79,132 @@ export default function Movies() {
 
   const handleGenreClick = (genreId) => {
     setSelectedGenre(selectedGenre === genreId ? null : genreId);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   return (
     <div className="container my-4">
       <div className="mb-4">
-      <div className="mb-3">
-      <i class="fa-solid fa-filter me-2"></i><span className="h5">Filter by Genre</span>
-      </div>
-        <div className="d-flex flex-wrap gap-2">
-          {genres.map((genre) => (
+        <div className="d-flex align-items-center mt-3">
+          <i className="fa-solid fa-filter fs-5 me-2"></i>
+          <span className="h4">Discover Movies by</span>
+          <button
+            className="ms-3 btn btn-secondary me-3"
+            onClick={() => setDropdownVisible(!dropdownVisible)}
+          >
+            {selectedFilter === "filter type"
+              ? "Filter Type"
+              : selectedFilter === "genre"
+              ? "Genre"
+              : selectedFilter === "rating"
+              ? "Rating"
+              : selectedFilter === "popularity"
+              ? "Popularity"
+              : ""}
+            <i
+              className={`ms-2 fa ${
+                dropdownVisible ? "fa-chevron-up" : "fa-chevron-down"
+              }`}
+            />
+          </button>
+          {selectedFilter !== "filter type" && (
+          <div className="d-flex align-items-center">
             <button
-              key={genre.id}
-              className={`btn bg-secondary text-white rounded-5 ${selectedGenre === genre.id ? "active fw-bold bg-dark" : ""}`}
-              onClick={() => handleGenreClick(genre.id)}
+              className="btn btn-dark fw-bold"
+              onClick={() => {
+                setSelectedFilter("filter type");
+                setSelectedGenre(null);
+                setCurrentPage(1);
+              }}
             >
-              {genre.name}
+              X
             </button>
-          ))}
+          </div>
+        )}
         </div>
+
+        {dropdownVisible && (
+          <div className="dropdown-menu show">
+            <button
+              className="dropdown-item"
+              onClick={() => {
+                setSelectedFilter("genre");
+                setDropdownVisible(false);
+              }}
+            >
+              Genre
+            </button>
+            <button
+              className="dropdown-item"
+              onClick={() => {
+                setSelectedFilter("rating");
+                setDropdownVisible(false);
+              }}
+            >
+              Rating
+            </button>
+            <button
+              className="dropdown-item"
+              onClick={() => {
+                setSelectedFilter("popularity");
+                setDropdownVisible(false);
+              }}
+            >
+              Popularity
+            </button>
+          </div>
+        )}
+
+        {selectedFilter === "genre" && (
+          <div className="d-flex flex-wrap gap-2 my-3">
+            {genres.map((genre) => (
+              <button
+                key={genre.id}
+                className={`btn bg-secondary text-white rounded-5 ${
+                  selectedGenre === genre.id
+                    ? "active fw-bold bg-dark"
+                    : ""
+                }`}
+                onClick={() => handleGenreClick(genre.id)}
+              >
+                {genre.name}
+              </button>
+            ))}
+          </div>
+        )}
+        {selectedFilter !== "genre" && selectedFilter !== "popularity"  && (
+          <ul className="nav nav-tabs mt-4">
+            {[
+              { id: "trending", label: "Trending" },
+              { id: "top_rated", label: "Top Rated" },
+              { id: "upcoming", label: "Upcoming" },
+            ].map((tab) => (
+              <li className="nav-item" key={tab.id}>
+                <button
+                  className={`nav-link ${
+                    activeTab === tab.id ? "active fw-bold text-dark" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    setCurrentPage(1);
+                  }}
+                >
+                  {tab.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
-      {!selectedGenre && (
-        <ul className="nav nav-tabs mb-4">
-          {[
-            { id: "trending", label: "Trending" },
-            { id: "top_rated", label: "Top Rated" },
-            { id: "upcoming", label: "Upcoming" },
-          ].map((tab) => (
-            <li className="nav-item" key={tab.id}>
-              <button
-                className={`nav-link ${activeTab === tab.id ? "active fw-bold text-dark" : ""}`}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  setCurrentPage(1);
-                }}
-              >
-                {tab.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <div className="row g-4 my-4 d-flex justify-content-center">
+      <div className="row g-4 d-flex justify-content-center">
         {moviesData.map((movie) => (
           <CardMovies key={movie.id} movie={movie} showRating={true} />
         ))}
       </div>
 
       <nav aria-label="Page navigation example">
-        <ul className="pagination d-flex justify-content-center">
+        <ul className="pagination d-flex justify-content-center mt-3">
           {Array.from({ length: 10 }, (_, index) => index + 1).map((number) => (
             <li
               className={`page-item ${currentPage === number ? "active" : ""}`}

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { pathImg } from "../../../constant/pathImg";
+import nofilm from "../../../assets/poster.png";
 import { MoviesContext } from "../../context/Store";
 
 export default function CardMovies({ movie, showRating = false }) {
@@ -29,7 +30,9 @@ export default function CardMovies({ movie, showRating = false }) {
         {/* Movie Poster */}
         <Link to={`/details/movie/${movie.id}`}>
           <img
-            src={pathImg(movie.poster_path)}
+            src={movie.poster_path
+              ? pathImg(movie.poster_path)
+              : nofilm}
             alt={movie.title}
             className="w-100 rounded-4 mb-2"
           />

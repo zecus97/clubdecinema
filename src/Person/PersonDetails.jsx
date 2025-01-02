@@ -12,10 +12,12 @@ export default function PersonDetails() {
   const [tvCredits, setTvCredits] = useState([]);
   const [activeTab, setActiveTab] = useState("movies");
   const [showFullBiography, setShowFullBiography] = useState(false);
+  const [movieLimit, setMovieLimit] = useState(18);  // Limit for movies
+  const [tvLimit, setTvLimit] = useState(18);        // Limit for TV shows
 
   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     getPersonDetails(personId);
@@ -40,6 +42,7 @@ export default function PersonDetails() {
       .then(({ data }) => setMovieCredits(data.cast))
       .catch((err) => console.error(err));
   }
+
   function getPersonTVCredits(id) {
     axios
       .get(
@@ -48,10 +51,19 @@ export default function PersonDetails() {
       .then(({ data }) => setTvCredits(data.cast))
       .catch((err) => console.error(err));
   }
-  const renderCredits = (credits, type) => {
+
+  const handleLoadMoreMovies = () => {
+    setMovieLimit(movieLimit + 18); 
+  };
+
+  const handleLoadMoreTVShows = () => {
+    setTvLimit(tvLimit + 18); 
+  };
+
+  const renderCredits = (credits, type, limit) => {
     return (
       <div className="row">
-        {credits.map((item) => {
+        {credits.slice(0, limit).map((item) => {
           const rating = item.vote_average ? item.vote_average.toFixed(1) : null;
           return (
             <div className="col-6 col-md-2 mb-4 theCard" key={item.id}>
@@ -62,7 +74,6 @@ export default function PersonDetails() {
                     src={item.poster_path ? pathImg(item.poster_path) : nofilm}
                     alt={item.title || item.name}
                   />
-                  
                   {rating && (
                     <div
                       className="rating-badge position-absolute top-0 start-0 p-2 text-white"
@@ -74,7 +85,6 @@ export default function PersonDetails() {
                       {rating}
                     </div>
                   )}
-  
                   <span className="fw-bold">
                     {item.title || item.name}
                     {item.release_date && <span className="text-secondary"> ({item.release_date?.split("-")[0]})</span>}
@@ -91,7 +101,6 @@ export default function PersonDetails() {
       </div>
     );
   };
-  
 
   const toggleBiography = () => {
     setShowFullBiography((prev) => !prev);
@@ -132,24 +141,24 @@ export default function PersonDetails() {
               )}
             </div>
           )}
-
-            {personDetails.birthday && (
-              <li>
-               <span className="text-info fw-bold fs-5">Birthday:</span> {personDetails.birthday}
-              </li>
-            )}
-            {personDetails.place_of_birth && (
-              <li>
-               <span className="text-info fw-bold fs-5">Place of Birth:</span> {personDetails.place_of_birth}
-              </li>
-            )}
-            {personDetails.popularity && (
-              <li>
-                <span className="text-info fw-bold fs-5">Popularity:</span> {personDetails.popularity}
-              </li>
-            )}
+          {personDetails.birthday && (
+            <li>
+              <span className="text-info fw-bold fs-5">Birthday:</span> {personDetails.birthday}
+            </li>
+          )}
+          {personDetails.place_of_birth && (
+            <li>
+              <span className="text-info fw-bold fs-5">Place of Birth:</span> {personDetails.place_of_birth}
+            </li>
+          )}
+          {personDetails.popularity && (
+            <li>
+              <span className="text-info fw-bold fs-5">Popularity:</span> {personDetails.popularity}
+            </li>
+          )}
         </div>
       </div>
+
       <div className="mt-5">
         <ul className="nav nav-tabs">
           <li className="nav-item">
@@ -169,9 +178,34 @@ export default function PersonDetails() {
             </button>
           </li>
         </ul>
+
         <div className="tab-content mt-4">
-          {activeTab === "movies" && renderCredits(movieCredits, "movie")}
-          {activeTab === "tv" && renderCredits(tvCredits, "tv")}
+          {activeTab === "movies" && (
+            <>
+              {renderCredits(movieCredits, "movie", movieLimit)}
+              {movieCredits.length > movieLimit && (
+                <button
+                  className="btn btn-secondary rounded-5 mt-3"
+                  onClick={handleLoadMoreMovies}
+                >
+                  Load More Movies
+                </button>
+              )}
+            </>
+          )}
+          {activeTab === "tv" && (
+            <>
+              {renderCredits(tvCredits, "tv", tvLimit)}
+              {tvCredits.length > tvLimit && (
+                <button
+                  className="btn btn-secondary rounded-5 mt-3"
+                  onClick={handleLoadMoreTVShows}
+                >
+                  Load More TV Shows
+                </button>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

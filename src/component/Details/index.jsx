@@ -85,7 +85,9 @@ export default function Details() {
                 className="w-100 rounded-4"
                 src={
                   (mediatype === "movie" || mediatype === "tv") &&
-                  pathImg(details.poster_path)
+                  details.poster_path
+                        ? pathImg(details.poster_path)
+                        : nofilm
                 }
                 alt={details.title || details.name}
               />

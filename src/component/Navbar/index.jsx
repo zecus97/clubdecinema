@@ -54,12 +54,12 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark custom-navbar p-2">
       <div className="container">
-        <Link className="navbar-brand fs-2" to="home">
+        <Link className="navbar-brand h1 fs-2" to="home">
         <i class="fa-solid fa-clapperboard me-2"></i>
         <i class="fi fi-bs-clapper-open"></i>
         Club de Cinema
         </Link>
-        <div className="search-container mx-auto mt-1">
+        <div className="search-container mx-auto">
           <div className="input-group">
             <input
               className="form-control custom-search-input"
