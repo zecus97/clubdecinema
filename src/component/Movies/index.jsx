@@ -87,7 +87,7 @@ export default function Movies() {
       <div className="mb-4">
         <div className="d-flex align-items-center mt-3">
           <i className="fa-solid fa-filter fs-5 me-2"></i>
-          <span className="h4">Discover Movies by</span>
+          <span className="h4">Discover Movies</span>
           <button
             className="ms-3 btn btn-secondary me-3"
             onClick={() => setDropdownVisible(!dropdownVisible)}
