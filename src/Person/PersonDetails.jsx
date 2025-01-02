@@ -14,6 +14,10 @@ export default function PersonDetails() {
   const [showFullBiography, setShowFullBiography] = useState(false);
 
   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+
+  useEffect(() => {
     getPersonDetails(personId);
     getPersonMovieCredits(personId);
     getPersonTVCredits(personId);
