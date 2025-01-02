@@ -8,7 +8,7 @@ export default function Footer() {
       </h6>
       <small className="fw-bold">
         <span className="blockquote-footer">About this website:</span> built with
-        React & React-Router-Dom (App Router), Bootstrap, Swiper & Vercel hosting.
+        React & React-Router-Dom (App Router), Bootstrap, Swiper & Netlify hosting.
       </small>
     </footer>
   );

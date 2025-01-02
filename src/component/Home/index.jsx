@@ -21,7 +21,7 @@ export default function Home() {
       {status === "none" ? (
         <>
           {/* Movies Section */}
-          <div className="row g-4 my-5">
+          <div className="row g-4 mt-4 mb-5">
             <div className="col-6 col-md-4">
               <div className="brdr w-25"></div>
               <h1 className="h3 my-4">
