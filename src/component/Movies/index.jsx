@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import CardMovies from "../Home/component/CardMovies";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 
 export default function Movies() {
   const [activeTab, setActiveTab] = useState("trending");
@@ -10,12 +9,9 @@ export default function Movies() {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(null);
 
-      const location = useLocation();
-    
-      useEffect(() => {
-        window.scrollTo(0, 0);
-      }, [location]); 
-  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -36,7 +32,6 @@ export default function Movies() {
     let url = "";
 
     if (selectedGenre) {
-      // Use the discover endpoint when filtering by genre
       url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}&with_genres=${selectedGenre}`;
     } else if (activeTab === "trending") {
       url = `https://api.themoviedb.org/3/trending/movie/day?api_key=c9fac173689f5f01ba1b0420f66d7093&page=${currentPage}`;
@@ -60,7 +55,7 @@ export default function Movies() {
 
   const handleGenreClick = (genreId) => {
     setSelectedGenre(selectedGenre === genreId ? null : genreId);
-    setCurrentPage(1); // Reset to page 1 when a new genre is selected
+    setCurrentPage(1); 
   };
 
   return (

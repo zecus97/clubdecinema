@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import CardTv from './../Home/component/CardTv';
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 
 export default function Tv() {
   const [tv, setTv] = useState([]); 
@@ -11,13 +10,11 @@ export default function Tv() {
   const [genres, setGenres] = useState([]); 
   const [selectedGenre, setSelectedGenre] = useState(null); 
 
-    const location = useLocation();
-  
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [location]); 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
-  // Fetch genres
+
   useEffect(() => {
     const fetchGenres = async () => {
       try {
