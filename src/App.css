@@ -1,38 +1,92 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+:root {
+  --mainColor: #131722;
+  --secColor: #fff;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  background-color: #130f40;
+  background-image: linear-gradient(70deg, #130f40 0%, #000000 74%);
+  font-family: "Montserrat Alternates", sans-serif;
+  color: var(--secColor) !important;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+a,
+a:hover {
+  color: #fff !important;
+  text-decoration: none !important;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+li {
+  list-style: none;
+  margin: 10px 0;
+}
+input {
+  background-color: transparent !important;
+  color: #fff !important;
+}
+.theCard{
+  transition: 0.2s all ease-in-out;
+}
+.theCard:hover{
+  transform: scale(1.1);
+  filter: drop-shadow(1px 1px 1px rgb(13, 202, 240,1)) !important;
+  cursor: pointer;
+}
+.theCard .rating-badge {
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 0.3rem 0.6rem;
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
   color: white;
+  border-radius: 0 0 6px 0;
+}
+.page-link {
+  background-color: transparent !important;
+  color: #fff !important;
+  text-decoration: none; /* Remove underline */
+}
+/* Style the hover effect */
+.page-link:hover {
+  background-color: white !important;
+  color: black !important;
+}
+.pagination .page-item.active .page-link {
+  background-color: white !important; /* Active background */
+  color: black !important; /* Active text color */
+}
+/* Swiper buttons */
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid white; 
+  width: 50px !important; /* Adjust size */
+  height: 60px !important; /* Adjust size */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-70%);
+  z-index: 10;
+  color: white !important;
+  pointer-events: all;
+}
+/* Hover effect */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: lightgray !important;
+}
+/* Default font size for larger screens */
+.swiper-slide p {
+  font-size: calc(1rem + 0.1vw);
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Adjust font size for smaller screens */
+@media (max-width: 768px) {
+  .swiper-slide p {
+    font-size: 0.85rem !important;
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media (max-width: 480px) {
+  .swiper-slide p {
+    font-size: 0.75rem !important;
   }
 }

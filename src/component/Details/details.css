@@ -1,0 +1,31 @@
+.details-background {
+  position: relative;
+  background-size: cover;
+  background-position: 50% 35%;
+  background-repeat: no-repeat;
+  padding: 50px 0;
+}
+
+.details-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    385deg, /* Direction of the gradient */
+    rgba(6, 2, 39, 0.9) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 1;
+}
+
+.details-container {
+  position: relative;
+  padding: 20px;
+  z-index: 2;
+}
+.item-date{
+color: lightgray !important;
+}

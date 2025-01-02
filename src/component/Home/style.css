@@ -1,0 +1,8 @@
+.brdr {
+  height: 1px;
+  width: 100%;
+  background-color: rgba(205, 201, 201, 0.599);
+}
+h1 {
+  line-height: 1.5 !important;
+}
