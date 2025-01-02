@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import CardMovies from "../Home/component/CardMovies";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 export default function Movies() {
   const [activeTab, setActiveTab] = useState("trending");
@@ -8,6 +9,13 @@ export default function Movies() {
   const [currentPage, setCurrentPage] = useState(1);
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(null);
+
+      const location = useLocation();
+    
+      useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [location]); 
+  
 
   useEffect(() => {
     const fetchGenres = async () => {
