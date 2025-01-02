@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import nofilm from "../../assets/poster.png";
 import person from "../../assets/images.jpeg";
 
@@ -19,6 +19,12 @@ export default function Details() {
   const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [similar, setSimilar] = useState([]);
   const [videos, setVideos] = useState([]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]); 
 
   useEffect(() => {
     getMovie(id, mediatype, setDetails);
