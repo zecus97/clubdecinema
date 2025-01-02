@@ -114,7 +114,7 @@
   }
   
   .nav-link:hover {
-    color: rgba(255, 255, 255, 0.5) !important;
+    color: rgb(71, 68, 68) !important;
   }
   .offcanvas {
     max-width: 350px; /* Adjust as per your design */

@@ -91,7 +91,7 @@ export default function Tv() {
           {tabs.map((tab) => (
             <li className="nav-item" key={tab.id}>
               <button
-                className={`nav-link ${type === tab.id ? "active" : ""}`}
+                className={`nav-link ${type === tab.id ? "active fw-bold text-dark" : ""}`}
                 onClick={() => {
                   setType(tab.id);
                   setCurrentPage(1);

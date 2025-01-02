@@ -150,7 +150,7 @@ export default function PersonDetails() {
         <ul className="nav nav-tabs">
           <li className="nav-item">
             <button
-              className={`nav-link ${activeTab === "movies" ? "active" : ""}`}
+              className={`nav-link ${activeTab === "movies" ? "active fw-bold text-dark" : ""}`}
               onClick={() => setActiveTab("movies")}
             >
               Movies
@@ -158,7 +158,7 @@ export default function PersonDetails() {
           </li>
           <li className="nav-item">
             <button
-              className={`nav-link ${activeTab === "tv" ? "active" : ""}`}
+              className={`nav-link ${activeTab === "tv" ? "active fw-bold text-dark" : ""}`}
               onClick={() => setActiveTab("tv")}
             >
               TV Shows

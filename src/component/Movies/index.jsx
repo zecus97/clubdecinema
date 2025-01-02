@@ -83,7 +83,7 @@ export default function Movies() {
           ].map((tab) => (
             <li className="nav-item" key={tab.id}>
               <button
-                className={`nav-link ${activeTab === tab.id ? "active" : ""}`}
+                className={`nav-link ${activeTab === tab.id ? "active fw-bold text-dark" : ""}`}
                 onClick={() => {
                   setActiveTab(tab.id);
                   setCurrentPage(1);
