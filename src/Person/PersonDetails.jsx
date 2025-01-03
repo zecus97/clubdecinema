@@ -184,12 +184,14 @@ export default function PersonDetails() {
             <>
               {renderCredits(movieCredits, "movie", movieLimit)}
               {movieCredits.length > movieLimit && (
+                <div className="d-flex justify-content-center mt-3">
                 <button
-                  className="btn btn-secondary rounded-5 mt-3"
+                  className="btn btn-secondary rounded-5 mt-3 p-3"
                   onClick={handleLoadMoreMovies}
                 >
                   Load More Movies
                 </button>
+              </div>
               )}
             </>
           )}
@@ -197,12 +199,14 @@ export default function PersonDetails() {
             <>
               {renderCredits(tvCredits, "tv", tvLimit)}
               {tvCredits.length > tvLimit && (
+                <div className="d-flex justify-content-center mt-3">
                 <button
-                  className="btn btn-secondary rounded-5 mt-3"
+                  className="btn btn-secondary rounded-5 mt-3 p-3"
                   onClick={handleLoadMoreTVShows}
                 >
                   Load More TV Shows
                 </button>
+              </div>
               )}
             </>
           )}

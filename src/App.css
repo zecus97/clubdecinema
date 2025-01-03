@@ -77,11 +77,21 @@ input {
 .swiper-slide p {
   font-size: calc(1rem + 0.1vw);
 }
+.tabs-container .nav-tabs {
+  border-bottom: none;
+}
 
 /* Adjust font size for smaller screens */
 @media (max-width: 768px) {
   .swiper-slide p {
     font-size: 0.85rem !important;
+  }
+  .tabs-container .dropdown-toggle {
+    font-size: 0.7rem; 
+    padding: 0.25rem 0.5rem;
+  }
+  .tabs-container .nav-item {
+    font-size: 0.7rem; 
   }
 }
 
@@ -89,4 +99,17 @@ input {
   .swiper-slide p {
     font-size: 0.75rem !important;
   }
+  .tabs-container .dropdown-toggle {
+    font-size: 0.6rem; 
+    padding: 0.25rem 0.5rem;
+  }
+  .tabs-container .nav-item {
+    font-size: 0.7rem;
+  }
+  .filter-items {
+    font-size: 0.7rem !important;
+  }
+}
+.tabs-container .nav-tabs {
+  border-bottom: none;
 }
