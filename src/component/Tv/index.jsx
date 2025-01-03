@@ -96,7 +96,7 @@ export default function Tv() {
       <div className="mb-4">
         <div className="d-flex align-items-center mt-3">
           <i className="fa-solid fa-filter fs-5 me-2"></i>
-          <span className="h4">Discover TV Shows</span>
+          <span className="h4 mt-1">Discover TV Shows</span>
           <div className="dropdown">
             <button
               className="btn btn-secondary dropdown-toggle mx-2 py-1"
@@ -270,13 +270,13 @@ export default function Tv() {
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
         >
-          Previous
+          <i class="fa-solid fa-angle-left me-1"></i>Previous
         </button>
         <button
           className="btn btn-secondary"
           onClick={() => setCurrentPage(currentPage + 1)}
         >
-          Next
+          Next<i class="ms-1 fa-solid fa-angle-right"></i>
         </button>
       </div>
     </div>

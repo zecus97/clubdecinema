@@ -102,8 +102,8 @@ useEffect(() => {
     <div className="container my-4">
       <div className="mb-4">
         <div className="d-flex align-items-center mt-3">
-          <i className="fa-solid fa-filter fs-5 me-2"></i>
-          <span className="h4">Discover Movies</span>
+          <i className="fa-solid fa-filter fs-5 me-2 d-flex align-items-center"></i>
+          <span className="h4 mt-1">Discover Movies</span>
           <div className="dropdown">
          <button
           className="btn btn-secondary dropdown-toggle mx-2 py-1"
@@ -223,7 +223,7 @@ useEffect(() => {
 )}
 <div className="dropdown">
   <button
-    className="btn btn-primary dropdown-toggle py-2"
+    className="btn btn-primary dropdown-toggle px-1 py-2"
     type="button"
     id="sortDropdown"
     data-bs-toggle="dropdown"
@@ -301,13 +301,13 @@ useEffect(() => {
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
         >
-          Previous
+         <i class="fa-solid fa-angle-left me-1"></i>Previous
         </button>
         <button
           className="btn btn-secondary"
           onClick={() => setCurrentPage(currentPage + 1)}
         >
-          Next
+          Next<i class="ms-1 fa-solid fa-angle-right"></i>
         </button>
       </div>
     </div>
