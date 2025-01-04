@@ -11,8 +11,9 @@ export default function PersonDetails() {
   const [movieCredits, setMovieCredits] = useState([]);
   const [tvCredits, setTvCredits] = useState([]);
   const [activeTab, setActiveTab] = useState("movies");
+  const [selectedSort, setSelectedSort] = useState("rating");
   const [showFullBiography, setShowFullBiography] = useState(false);
-  const [movieLimit, setMovieLimit] = useState(18); 
+  const [movieLimit, setMovieLimit] = useState(18);
   const [tvLimit, setTvLimit] = useState(18);
 
   useEffect(() => {
@@ -52,18 +53,24 @@ export default function PersonDetails() {
       .catch((err) => console.error(err));
   }
 
-  const handleLoadMoreMovies = () => {
-    setMovieLimit(movieLimit + 18); 
-  };
-
-  const handleLoadMoreTVShows = () => {
-    setTvLimit(tvLimit + 18); 
+  const sortCredits = (credits) => {
+    if (selectedSort === "rating") {
+      return [...credits].sort((a, b) => b.vote_average - a.vote_average);
+    } else if (selectedSort === "year") {
+      return [...credits].sort(
+        (a, b) =>
+          new Date(b.release_date || b.first_air_date) -
+          new Date(a.release_date || a.first_air_date)
+      );
+    }
+    return credits;
   };
 
   const renderCredits = (credits, type, limit) => {
+    const sortedCredits = sortCredits(credits);
     return (
       <div className="row">
-        {credits.slice(0, limit).map((item) => {
+        {sortedCredits.slice(0, limit).map((item) => {
           const rating = item.vote_average ? item.vote_average.toFixed(1) : null;
           return (
             <div className="col-6 col-md-2 mb-4 theCard" key={item.id}>
@@ -78,7 +85,7 @@ export default function PersonDetails() {
                     <div
                       className="rating-badge position-absolute top-0 start-0 p-2 text-white"
                       style={{
-                        zIndex: 1
+                        zIndex: 1,
                       }}
                     >
                       <i className="fa-solid fa-star text-warning me-1"></i>
@@ -160,7 +167,10 @@ export default function PersonDetails() {
       </div>
 
       <div className="mt-5">
-        <ul className="nav nav-tabs">
+      <div className="tabs-container border-bottom">
+      <div className="d-flex justify-content-between align-items-center mt-3 pb-1">
+      <div className="d-flex align-items-center">
+      <ul className="nav nav-tabs">
           <li className="nav-item">
             <button
               className={`nav-link ${activeTab === "movies" ? "active fw-bold text-dark" : ""}`}
@@ -178,20 +188,36 @@ export default function PersonDetails() {
             </button>
           </li>
         </ul>
-
+      </div>
+        <div className="d-flex">
+          <button
+            className={`btn person-btn align-items-center btn-sm ${selectedSort === "rating" ? "btn-primary" : "btn-secondary"} me-2`}
+            onClick={() => setSelectedSort("rating")}
+          >
+            Sort by Rating
+          </button>
+          <button
+            className={`btn person-btn btn-sm ${selectedSort === "year" ? "btn-primary" : "btn-secondary"}`}
+            onClick={() => setSelectedSort("year")}
+          >
+            Sort by Year
+          </button>
+        </div>
+      </div>
+      </div>
         <div className="tab-content mt-4">
           {activeTab === "movies" && (
             <>
               {renderCredits(movieCredits, "movie", movieLimit)}
               {movieCredits.length > movieLimit && (
                 <div className="d-flex justify-content-center mt-3">
-                <button
-                  className="btn btn-secondary rounded-5 mt-3 p-3"
-                  onClick={handleLoadMoreMovies}
-                >
-                  Load More Movies
-                </button>
-              </div>
+                  <button
+                    className="btn btn-secondary rounded-5 mt-3 p-3"
+                    onClick={() => setMovieLimit(movieLimit + 18)}
+                  >
+                    Load More Movies
+                  </button>
+                </div>
               )}
             </>
           )}
@@ -200,13 +226,13 @@ export default function PersonDetails() {
               {renderCredits(tvCredits, "tv", tvLimit)}
               {tvCredits.length > tvLimit && (
                 <div className="d-flex justify-content-center mt-3">
-                <button
-                  className="btn btn-secondary rounded-5 mt-3 p-3"
-                  onClick={handleLoadMoreTVShows}
-                >
-                  Load More TV Shows
-                </button>
-              </div>
+                  <button
+                    className="btn btn-secondary rounded-5 mt-3 p-3"
+                    onClick={() => setTvLimit(tvLimit + 18)}
+                  >
+                    Load More TV Shows
+                  </button>
+                </div>
               )}
             </>
           )}

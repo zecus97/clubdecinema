@@ -109,6 +109,10 @@ input {
   .filter-items {
     font-size: 0.7rem !important;
   }
+  .person-btn{
+    font-size: 0.7rem !important; 
+    padding: 0.25rem 0.5rem !important;
+  }
 }
 .tabs-container .nav-tabs {
   border-bottom: none;
