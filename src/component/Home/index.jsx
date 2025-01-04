@@ -88,10 +88,10 @@ export default function Home() {
             <div className="col-6 col-md-4">
               <div className="brdr w-25"></div>
               <h1 className="h3 my-4">
-                <i className="fa-solid fa-film me-2"></i>Trending
+              <i class="fa-solid fa-tv me-2"></i>Trending
                 <br /> TV Shows <br /> To Watch Right Now
               </h1>
-              <p className="opacity-75">Top Trending Movies by Day</p>
+              <p className="opacity-75">Top Trending TV Shows by Day</p>
               <div className="brdr"></div>
             </div>
             {tv.slice(0, 10).map((tv) => (
