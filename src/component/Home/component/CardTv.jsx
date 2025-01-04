@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { pathImg } from "../../../constant/pathImg";
 import { MoviesContext } from "../../context/Store";
+import nofilm from "../../../assets/poster.png";
 
 export default function CardTv({ tv, showRating = false }) {
   const { setType } = useContext(MoviesContext);
@@ -28,7 +29,7 @@ export default function CardTv({ tv, showRating = false }) {
 
         <Link to={`/details/tv/${tv.id}`}>
           <img
-            src={pathImg(tv.poster_path)}
+            src={tv.poster_path ? pathImg(tv.poster_path) : nofilm}
             alt={tv.name}
             className="w-100 rounded-4 mb-2"
           />

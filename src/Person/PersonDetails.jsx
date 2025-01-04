@@ -12,8 +12,8 @@ export default function PersonDetails() {
   const [tvCredits, setTvCredits] = useState([]);
   const [activeTab, setActiveTab] = useState("movies");
   const [showFullBiography, setShowFullBiography] = useState(false);
-  const [movieLimit, setMovieLimit] = useState(18);  // Limit for movies
-  const [tvLimit, setTvLimit] = useState(18);        // Limit for TV shows
+  const [movieLimit, setMovieLimit] = useState(18); 
+  const [tvLimit, setTvLimit] = useState(18);
 
   useEffect(() => {
     window.scrollTo(0, 0);

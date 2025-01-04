@@ -57,6 +57,27 @@
     max-height: 400px;
     overflow-y: auto;
   }
+  /* Scrollbar styles for WebKit browsers */
+.custom-dropdown::-webkit-scrollbar {
+  width: 8px; 
+  background-color: rgba(0, 0, 0, 0.8); 
+}
+
+.custom-dropdown::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 8px; 
+  border: 2px solid rgba(0, 0, 0, 0.8); 
+}
+
+.custom-dropdown::-webkit-scrollbar-thumb:hover {
+  background-color: #777; 
+}
+
+/* For Firefox */
+.custom-dropdown {
+  scrollbar-width: thin; /* Thinner scrollbar */
+  scrollbar-color: #555 rgba(0, 0, 0, 0.8); /* Thumb color and track background */
+}
   
   .custom-dropdown-item {
     display: flex;

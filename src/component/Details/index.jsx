@@ -19,12 +19,19 @@ export default function Details() {
   const [credits, setCredits] = useState({ cast: [], crew: [] });
   const [similar, setSimilar] = useState([]);
   const [videos, setVideos] = useState([]);
+  const [seasons, setSeasons] = useState([]);
 
   const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]); 
+
+  useEffect(() => {
+    if (mediatype === "tv") {
+       getSeasons(id);
+    }
+  }, [id, mediatype]);
 
   useEffect(() => {
     getMovie(id, mediatype, setDetails);
@@ -69,16 +76,23 @@ export default function Details() {
       .then(({ data }) => callback(data.results))
       .catch((err) => console.error(err));
   }
-
+  function getSeasons(tvId) {
+    axios
+      .get(
+        `https://api.themoviedb.org/3/tv/${tvId}?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US`
+      )
+      .then(({ data }) => setSeasons(data.seasons))
+      .catch((err) => console.error(err));
+  }
   return (
     <>
       <div
-        className="details-background container-fluid"
+        className="details-background container-fluid pb-4"
         style={{
           backgroundImage: `url(https://www.themoviedb.org/t/p/original${details.backdrop_path})`,
         }}
       >
-        <div className="details-container container">
+        <div className="details-container container pb-3">
           <div className="row mt-5">
             <div className="col-md-3 mb-3">
               <img
@@ -177,11 +191,31 @@ export default function Details() {
           </div>
         </div>
       </div>
-      <div className="container">
+
+      <div className="container my-5">
+  {mediatype === "tv" && seasons.length > 0 && (
+    <>
+       <h3 className="text-info fw-bold mb-4">Seasons</h3>
+       <div className="d-flex flex-wrap gap-2">
+        {seasons.map((season) => (
+          <Link
+            key={season.id}
+            to={`/tv/${id}/season/${season.season_number}`}
+            className="btn btn-secondary rounded-5 text-decoration-none"
+          >
+            {season.name}
+          </Link>
+        ))}
+      </div>
+       </>
+       )}
+      </div>
+
+       <div className="container">
       {(mediatype === "movie" || mediatype === "tv") && credits?.cast?.length > 0 && (
-  <div className="mt-5">
-    <h3 className="text-info fw-bold mb-4">Cast</h3>
-    <Swiper
+      <div className="mt-5">
+      <h3 className="text-info fw-bold mb-4">Cast</h3>
+      <Swiper
       modules={[Navigation]}
       navigation={true}
       spaceBetween={10}

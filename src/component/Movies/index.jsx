@@ -9,15 +9,22 @@ export default function Movies() {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState("filter type");
+  const [year, setYear] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedSort, setSelectedSort] = useState(null);
 
   const languages = [
     { code: "ar", name: "Arabic" },
     { code: "en", name: "English" },
+    { code: "fr", name: "French" },
     { code: "hi", name: "Hindi (Indian)" },
     { code: "tr", name: "Turkish" },
   ];
+
+  const years = Array.from(
+    { length: new Date().getFullYear() - 1950 + 1 },
+    (_, i) => 1950 + i
+  ).reverse();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,44 +47,52 @@ export default function Movies() {
 
   const fetchMoviesData = useCallback(async () => {
     let url = "";
-
-    if (selectedGenre && selectedFilter === "genre") {
-      url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}&with_genres=${selectedGenre}`;
+  
+    if (year && selectedGenre && selectedFilter === "genre") {
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&page=${currentPage}&with_genres=${selectedGenre}&primary_release_year=${year}`;
+    } 
+    else if (year && selectedLanguage && selectedFilter === "language") {
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&page=${currentPage}&with_original_language=${selectedLanguage}&primary_release_year=${year}`;
     }
+    else if (selectedGenre && selectedFilter === "genre") {
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}&with_genres=${selectedGenre}`;
+    } 
     else if (selectedLanguage && selectedFilter === "language") {
       url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&page=${currentPage}&with_original_language=${selectedLanguage}`;
-    }
-    // Default case (Trending, Top Rated, Upcoming)
+    } 
+    else if (year) {
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}&primary_release_year=${year}`;
+    } 
     else if (activeTab === "trending") {
       url = `https://api.themoviedb.org/3/trending/movie/day?api_key=c9fac173689f5f01ba1b0420f66d7093&page=${currentPage}`;
-    } else if (activeTab === "top_rated") {
+    } 
+    else if (activeTab === "top_rated") {
       url = `https://api.themoviedb.org/3/movie/top_rated?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}`;
-    } else if (activeTab === "upcoming") {
+    } 
+    else if (activeTab === "upcoming") {
       url = `https://api.themoviedb.org/3/movie/upcoming?api_key=c9fac173689f5f01ba1b0420f66d7093&language=en-US&page=${currentPage}`;
     }
-
-      try {
-    const response = await axios.get(url);
-    let movies = response.data.results;
-
-    if (selectedSort === "rating") {
-      movies = movies.sort((a, b) => b.vote_average - a.vote_average);
+  
+    try {
+      const response = await axios.get(url);
+      let movies = response.data.results;
+  
+      if (selectedSort === "rating") {
+        movies = movies.sort((a, b) => b.vote_average - a.vote_average);
+      } else if (selectedSort === "popularity") {
+        movies = movies.sort((a, b) => b.popularity - a.popularity);
+      } else if (selectedSort === "vote") {
+        movies = movies.sort((a, b) => b.vote_count - a.vote_count);
+      } else if (selectedSort === "meta") {
+        movies = movies.sort((a, b) => (b.vote_average * b.popularity) - (a.vote_average * a.popularity));
+      }
+  
+      setMoviesData(movies);
+    } catch (err) {
+      console.error("Error fetching movies data:", err);
     }
-    else if (selectedSort === "popularity") {
-      movies = movies.sort((a, b) => b.popularity - a.popularity);
-    }
-    else if (selectedSort === "vote") {
-      movies = movies.sort((a, b) => b.vote_count - a.vote_count);
-    }
-    else if (selectedSort === "meta") {
-      movies = movies.sort((a, b) => (b.vote_average * b.popularity) - (a.vote_average * a.popularity));
-    }
-
-    setMoviesData(movies);
-  } catch (err) {
-    console.error("Error fetching movies data:", err);
-  }
-}, [activeTab, currentPage, selectedGenre, selectedLanguage, selectedFilter, selectedSort]);
+  }, [activeTab, currentPage, selectedGenre, selectedLanguage, selectedFilter, selectedSort, year]);
+  
 
 useEffect(() => {
   setSelectedSort(null);
@@ -86,6 +101,11 @@ useEffect(() => {
   useEffect(() => {
     fetchMoviesData();
   }, [fetchMoviesData]);
+
+  const handleYearSelect = (selectedYear) => {
+    setYear(selectedYear);
+    setCurrentPage(1);
+  };
 
   const handleLanguageClick = (languageCode) => {
     setSelectedLanguage(selectedLanguage === languageCode ? null : languageCode);
@@ -100,13 +120,13 @@ useEffect(() => {
 
   return (
     <div className="container my-4">
-      <div className="mb-4">
-        <div className="d-flex align-items-center mt-3">
-          <i className="fa-solid fa-filter fs-5 me-2 d-flex align-items-center"></i>
-          <span className="h4 mt-1">Discover Latest Movies</span>
+     <div className="mb-4">
+      <div className="d-flex align-items-center mt-3">
+          <i className="fa-solid fa-filter fs-5 me-2"></i>
+          <h2>Discover Movies</h2>
           <div className="dropdown">
          <button
-          className="btn btn-secondary dropdown-toggle mx-2 py-1"
+          className="btn filter-items btn-secondary dropdown-toggle ms-2 me-1 py-1"
           type="button"
           id="filterDropdown"
           data-bs-toggle="dropdown"
@@ -141,13 +161,12 @@ useEffect(() => {
         Language
         </button>
         </li>
-      </ul>
-     </div>
-
+        </ul>
+    </div>
           {selectedFilter !== "filter type" && (
           <div className="d-flex align-items-center">
             <button
-              className="btn btn-dark fw-bold py-1"
+              className="btn btn-dark fw-bold filter-items py-1"
               onClick={() => {
                 setSelectedFilter("filter type");
                 setSelectedGenre(null);
@@ -158,6 +177,41 @@ useEffect(() => {
               X
             </button>
           </div>
+        )}
+        <div className="dropdown">
+          <button
+            className="btn btn-secondary filter-items dropdown-toggle mx-1 py-1"
+            type="button"
+            id="yearDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {year || "Year"}
+          </button>
+          <ul
+          className="dropdown-menu overflow-y-auto"
+          style={{ maxHeight: "200px" }}
+          aria-labelledby="yearDropdown"
+          >
+            {years.map((yr) => (
+              <li key={yr}>
+                <button
+                  className="dropdown-item"
+                  onClick={() => handleYearSelect(yr)}
+                >
+                  {yr}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {year && (
+          <button
+            className="btn btn-dark fw-bold filter-items py-1"
+            onClick={() => setYear(null)}
+          >
+            X
+          </button>
         )}
       </div>
         {selectedFilter === "genre" && (
@@ -194,16 +248,17 @@ useEffect(() => {
             ))}
           </div>
         )}
-<div className="tabs-container border-bottom">
-<div className="d-flex justify-content-between align-items-center mt-3 pb-1">
-{selectedFilter !== "genre" && selectedFilter !== "language"  && (
-  <div className="d-flex align-items-center">
-  <ul className="nav nav-tabs align-items-center">
-    {[
+
+      <div className="tabs-container border-bottom">
+      <div className="d-flex justify-content-between align-items-center mt-3 pb-1">
+      {selectedFilter !== "genre" && selectedFilter !== "language" && !year  && (
+      <div className="d-flex align-items-center">
+      <ul className="nav nav-tabs align-items-center">
+      {[
       { id: "trending", label: "Trending" },
       { id: "top_rated", label: "Top Rated" },
       { id: "upcoming", label: "Upcoming" },
-    ].map((tab) => (
+      ].map((tab) => (
       <li className="nav-item" key={tab.id}>
         <button
           className={`nav-link ${
@@ -217,13 +272,14 @@ useEffect(() => {
           {tab.label}
         </button>
       </li>
-    ))}
-  </ul>
-</div>
-)}
+      ))}
+      </ul>
+      </div>
+      )}
+
 <div className="dropdown">
   <button
-    className="btn btn-primary dropdown-toggle px-1 py-2"
+    className="btn btn-primary dropdown-toggle px-4 py-1"
     type="button"
     id="sortDropdown"
     data-bs-toggle="dropdown"
@@ -277,24 +333,30 @@ useEffect(() => {
   </ul>
   {selectedSort !== null && (
         <button
-        className="btn btn-dark fw-bold ms-1 px-1 py-1 rounded-5" 
+        className="btn btn-dark fw-bold ms-1 px-1 py-0 rounded-5" 
         onClick={() => setSelectedSort(null)}>
           X
         </button>
       )}
 </div>
-
 </div>
 </div>
-
-      </div>
+</div>
 
       <div className="row g-4 d-flex justify-content-center">
-        {moviesData.map((movie) => (
-          <CardMovies key={movie.id} movie={movie} showRating={true} />
-        ))}
+      {moviesData.length > 0 ? (
+      moviesData.map((movie) => (
+      <CardMovies key={movie.id} movie={movie} showRating={true} />
+      ))
+      ) : (
+      <p className="text-center mt-4">
+      We're sorry, there are no available movies in{" "}
+      {year !== "year" ? year : "this selection"}.
+      </p>
+      )}
       </div>
 
+      {moviesData.length > 0 ? (
       <div className="d-flex justify-content-center align-items-center gap-2 mt-4">
         <button
           className="btn btn-secondary"
@@ -310,6 +372,7 @@ useEffect(() => {
           Next<i class="ms-1 fa-solid fa-angle-right"></i>
         </button>
       </div>
+      ) : null}
     </div>
   );
 }

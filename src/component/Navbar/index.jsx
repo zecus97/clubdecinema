@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Navbar.css";
 import nofilm from "../../assets/poster.png";
@@ -8,6 +9,20 @@ export default function Navbar() {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSearchButtonClick = () => {
+    if (query.trim()) {
+      navigate(`/search?query=${encodeURIComponent(query)}`);
+      setIsDropdownVisible(false);
+      setQuery("");
+    }
+  };  
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearchButtonClick();
+    }
+  };
 
   const handleLinkClick = () => {
     const offcanvas = document.getElementById("offcanvasDarkNavbar");
@@ -64,14 +79,19 @@ export default function Navbar() {
             <input
               className="form-control custom-search-input"
               type="search"
-              placeholder="Search movies, TV shows..."
+              placeholder="Search movies, TV shows or people..."
               value={query}
               onChange={handleInputChange}
               onBlur={() => setTimeout(() => setIsDropdownVisible(false), 200)}
               onFocus={() => setIsDropdownVisible(true)}
+              onKeyDown={handleKeyDown} 
             />
-            <button className="btn custom-search-button" type="button">
-              <i className="fa-solid fa-magnifying-glass"></i>
+            <button
+            className="btn custom-search-button"
+            type="button"
+            onClick={handleSearchButtonClick}
+            >
+            <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
           {isDropdownVisible && suggestions.length > 0 && (

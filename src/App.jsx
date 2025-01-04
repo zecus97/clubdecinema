@@ -11,6 +11,8 @@ import NotFound from "./component/NotFound";
 import Details from "./component/Details";
 import PersonDetails from "./Person/PersonDetails";
 import Footer from "./component/Footer";
+import SearchResults from "./component/SearchResults/SearchResults";
+import SeasonDetails from "./component/Seasons/SeasonDetails";
 function App() {
   return (
     <>
@@ -33,7 +35,9 @@ function App() {
             path="tv"
             element={<Tv />}
           />
+          <Route path="/search" element={<SearchResults />} />
           <Route path="details/:mediatype/:id" element={<Details />} />
+          <Route path="/tv/:id/season/:seasonNumber" element={<SeasonDetails />} />
           <Route path="/person/:personId" element={<PersonDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
