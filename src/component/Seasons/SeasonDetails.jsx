@@ -88,13 +88,13 @@ export default function SeasonDetails() {
               }
               alt={tvShowDetails.name}
             />
-            <h2 className="mt-3 text-light fw-bold">{tvShowDetails.name}</h2>
+            <h2 className="mt-3 text-light fw-bold text-center">{tvShowDetails.name}</h2>
+            </Link>
             {tvShowDetails.first_air_date && (
-              <p className="item-date fw-bold">
+              <p className="item-date text-center">
                 First Air Date: {tvShowDetails.first_air_date}
               </p>
             )}
-            </Link>
           </div>
        <div className="col-md-8 ms-3 episodes-box">
         <div className="d-flex justify-content-between align-items-center">
