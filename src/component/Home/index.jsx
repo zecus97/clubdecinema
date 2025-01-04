@@ -21,7 +21,7 @@ export default function Home() {
       {status === "none" ? (
         <>
           {/* Movies Section */}
-          <div className="row g-4 mt-4 mb-5">
+          <div className="row g-4 mt-4 mb-3">
             <div className="col-6 col-md-4">
               <div className="brdr w-25"></div>
               <h1 className="h3 my-4">
@@ -35,6 +35,13 @@ export default function Home() {
             <CardMovies key={movie.id} movie={movie} />
              ))}
             </div>
+            <Link
+            to="/movies"
+            className="btn btn-primary"
+            >
+            Browse More Movies
+            <i class="fa-solid fa-arrow-right ms-1"></i>
+            </Link>
 
           {/* People Section */}
           <div className="row g-4 my-5">
@@ -84,7 +91,7 @@ export default function Home() {
             </Swiper>
           </div>
           {/* Tv Section */}
-          <div className="row g-4 my-5">
+          <div className="row g-4 mt-5 mb-2">
             <div className="col-6 col-md-4">
               <div className="brdr w-25"></div>
               <h1 className="h3 my-4">
@@ -98,6 +105,13 @@ export default function Home() {
               <CardTv key={tv.id} tv={tv} />
             ))}
           </div>
+          <Link
+            to="/tv"
+            className="btn btn-primary"
+            >
+            Browse More TV Shows
+            <i class="fa-solid fa-arrow-right ms-1"></i>
+            </Link>
         </>
       ) : status === "error" ? (
         <h1>Error</h1>
