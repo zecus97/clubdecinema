@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import nofilm from "../../assets/poster.png";
@@ -12,10 +12,21 @@ export default function SeasonDetails() {
   const [tvShowDetails, setTvShowDetails] = useState({});
   const [seasons, setSeasons] = useState([]);
   const navigate = useNavigate();
+  const episodesRef = useRef(null);
 
    useEffect(() => {
       window.scrollTo(0, 0);
     }, []); 
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        getSeasonDetails(id, seasonNumber);
+        getTvShowDetails(id);
+        getSeasons(id);
+        if (episodesRef.current) {
+            episodesRef.current.scrollTop = 0;
+          }
+      }, [id, seasonNumber]);
 
   useEffect(() => {
     getSeasonDetails(id, seasonNumber);
@@ -66,7 +77,6 @@ export default function SeasonDetails() {
     >
       <div className="seasons-container container">
         <div className="row mt-5 align-items-start">
-          {/* Left Side: Poster and Details */}
           <div className="col-md-3 mb-3">
             <Link to={`/details/tv/${tvShowDetails.id}`}>
             <img
@@ -114,7 +124,10 @@ export default function SeasonDetails() {
         </div>
         </div>
         {Array.isArray(seasonDetails.episodes) && seasonDetails.episodes.length > 0 ? (
-       <div className="list-seasons overflow-y-auto" style={{ height: "100vh" }}>
+       <div
+       ref={episodesRef}
+       className="list-seasons overflow-y-auto"
+       style={{ height: "100vh" }}>
         {episodes.map((episode) => (
          <div
          key={episode.id}

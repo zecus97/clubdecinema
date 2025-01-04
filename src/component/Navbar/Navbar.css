@@ -75,8 +75,8 @@
 
 /* For Firefox */
 .custom-dropdown {
-  scrollbar-width: thin; /* Thinner scrollbar */
-  scrollbar-color: #555 rgba(0, 0, 0, 0.8); /* Thumb color and track background */
+  scrollbar-width: thin; 
+  scrollbar-color: #555 rgba(0, 0, 0, 0.8); 
 }
   
   .custom-dropdown-item {
@@ -116,7 +116,6 @@
     color: #9ca3af;
   }
   
-  /* Navbar toggler styles */
   .custom-toggler {
     border-color: rgba(255, 255, 255, 0.5);
     padding: 0.25rem 0.75rem;
@@ -138,17 +137,15 @@
     color: rgb(71, 68, 68) !important;
   }
   .offcanvas {
-    max-width: 350px; /* Adjust as per your design */
-    width: auto; /* Allow it to fit content naturally */
+    max-width: 350px;
+    width: auto; 
   }
   
-  /* Adjust for smaller screens if needed */
   @media (max-width: 576px) {
     .offcanvas {
-      max-width: 75%; /* Limit width to 75% of screen width */
+      max-width: 75%; 
     }
   }
-  /* Media query for responsive design */
   @media (max-width: 991px) {
     .search-container {
       order: -1;
