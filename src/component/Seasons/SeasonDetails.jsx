@@ -113,7 +113,7 @@ export default function SeasonDetails() {
         </ul>
         </div>
         </div>
-        {seasonDetails.episodes.length > 0 ? (
+        {Array.isArray(seasonDetails.episodes) && seasonDetails.episodes.length > 0 ? (
        <div className="list-seasons overflow-y-auto" style={{ height: "100vh" }}>
         {episodes.map((episode) => (
          <div
