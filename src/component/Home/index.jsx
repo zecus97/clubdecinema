@@ -91,7 +91,7 @@ export default function Home() {
             </Swiper>
           </div>
           {/* Tv Section */}
-          <div className="row g-4 mt-5 mb-2">
+          <div className="row g-4 mt-5 mb-3">
             <div className="col-6 col-md-4">
               <div className="brdr w-25"></div>
               <h1 className="h3 my-4">
