@@ -131,7 +131,7 @@ export default function SeasonDetails() {
         {episodes.map((episode) => (
          <div
          key={episode.id}
-         className="list-seasons-item d-flex align-items-start transparent-bg py-4"
+         className="list-seasons-item d-flex align-items-start transparent-bg py-4 px-2"
          >
         <img
           className="me-4 ms-3 rounded-3"
