@@ -132,10 +132,18 @@ export default function Details() {
                     ))}
                   </div>
                 )}
-                <li className="fs-2 fw-bold my-2">
-                  <i className="fa-solid fa-star text-warning me-2"></i>
-                  {details.vote_average}
+                <div className="d-flex align-items-center my-1">
+                 <li className="fs-4 fw-bold me-3">
+                 <i className="fa-solid fa-star text-warning me-1"></i>
+                 {details.vote_average}
+                 </li>
+                {mediatype === "movie" && details.runtime && (
+                <li className="item-date fs-5">
+                <i className="fa-regular fa-clock me-1"></i>
+                {Math.floor(details.runtime / 60)}h {details.runtime % 60}m
                 </li>
+                )}
+                </div>
                 {(mediatype === "movie" || mediatype === "tv") && details.tagline && (
                   <p className="fs-5 item-date">
                     {details.tagline}
